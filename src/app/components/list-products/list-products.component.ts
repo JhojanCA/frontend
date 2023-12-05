@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Product } from 'src/app/interfaces/product';
+import { ProductService } from 'src/app/services/product.service';
 
 @Component({
   selector: 'app-list-products',
@@ -6,12 +8,27 @@ import { Component } from '@angular/core';
   styleUrls: ['./list-products.component.css']
 })
 export class ListProductsComponent {
-  listProducts: { id: number; nombre: string; descripcion: string; precio: number; stock: number; }[];
+  listProducts: Product[] = [];
+  loading: boolean = false;
 
-  constructor() {
-    this.listProducts = [
-      { id: 1, nombre: 'Coca Cola', descripcion: 'Bebida con azucar', precio: 4, stock: 200 },
-      { id: 2, nombre: 'Corona', descripcion: 'Bebida de alcohol', precio: 5 , stock: 300 }
-    ];
+  constructor(private _productService: ProductService) { }
+
+  ngOnInit(): void {
+    this.getListProducts();
+  }
+
+  getListProducts() {
+    this.loading = true;
+    this._productService.getListProducts().subscribe((data: Product[]) => {
+      this.listProducts = data;
+      this.loading = false;
+    })
+  }
+
+  deleteProduct(id: number) {
+    this.loading = true;
+    this._productService.deleteProduct(id).subscribe(() => {
+      this.getListProducts();
+    })
   }
 }

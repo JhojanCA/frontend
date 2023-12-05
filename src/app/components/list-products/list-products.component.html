@@ -1,4 +1,5 @@
-<div class="container">
+<app-progress-bar *ngIf="loading"></app-progress-bar>
+<div class="container" *ngIf="!loading">
     <div class="title">
         <h2>Listado de productos</h2>
         <button routerLink="/add" type="button" class="btn btn-primary">Agregar producto</button>
@@ -15,14 +16,14 @@
         </thead>
         <tbody>
             <tr *ngFor="let item of listProducts" class="table-light">
-                <td>{{ item.nombre }}</td>
-                <td>{{ item.descripcion }}</td>
-                <td>{{ item.precio }}</td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{ item.price }}</td>
                 <td>{{ item.stock }}</td>
                 <td>
-                    <button routerLink="/edit/{{item.id}}" type="button"
+                    <button routerLink="/edit/{ item.id }" type="button"
                         class="btn btn-info btn-sm">Editar</button>
-                    <button type="button" class="btn btn-primary btn-sm ms-1">Eliminar</button>
+                    <button (click)="deleteProduct(item.id!)" type="button" class="btn btn-primary btn-sm ms-1">Eliminar</button>
                 </td>
             </tr>
         </tbody>
