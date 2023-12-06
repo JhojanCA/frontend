@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Product } from 'src/app/interfaces/product';
+import { ProductService } from 'src/app/services/product.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-add-edit',
@@ -9,14 +12,30 @@ import { Product } from 'src/app/interfaces/product';
 })
 export class AddEditComponent {
   form: FormGroup;
+  loading: boolean = false;
+  id: number;
+  operacion: string = 'Agregar '; 
 
-  constructor(private fb: FormBuilder) { 
+  constructor(private fb: FormBuilder, 
+              private _productService: ProductService,
+              private router: Router,
+              private aRoute: ActivatedRoute) { 
+
     this.form = this.fb.group({
-      nombre: ['', Validators.required],
-      descripcion: ['', Validators.required],
-      precio: [null, Validators.required],
+      name: ['', Validators.required],
+      description: ['', Validators.required],
+      price: [null, Validators.required],
       stock: [null, Validators.required],
     });
+
+    this.id = Number(aRoute.snapshot.paramMap.get('id'));
+  }
+
+  ngOnInit(): void {
+    if (this.id != 0) {
+      this.operacion = 'Editar ';
+      this.getProduct(this.id);
+    }
   }
 
   addProduct() {
@@ -25,8 +44,45 @@ export class AddEditComponent {
       description: this.form.value.descripcion,
       price: this.form.value.precio,
       stock: this.form.value.stock,
-    }    
-    console.log(product);
-    
+    } 
+
+    this.loading = true;
+
+    if (this.id !== 0) {
+      // Es editar
+      product.id = this.id;
+      this._productService.updateProduct(this.id, product).subscribe(() => {
+        Swal.fire({
+          title: "ACTUALIZADO CON ÉXITO!",
+          icon: "success"
+        }); 
+        this.loading = false;
+        this.router.navigate(['/']);
+      })
+    } else {
+      // Es agregar      
+      this._productService.saveProduct(product).subscribe(() => {        
+        Swal.fire({
+          title: "¡GUARDADO CON ÉXITO!",
+          icon: "success"
+        });     
+        this.loading = false;
+        this.router.navigate(['/']);   
+      });
+    }       
+  }
+
+  getProduct(id: number) {
+    this.loading = true;
+    this._productService.getProduct(id).subscribe((data: Product[]) => {
+      this.loading = false;
+      console.log(data[0]);
+      this.form.setValue({
+        name: data[0].name,
+        description: data[0].description,
+        price: data[0].price,
+        stock: data[0].stock
+      });
+    });
   }
 }

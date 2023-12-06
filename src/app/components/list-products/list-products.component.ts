@@ -32,8 +32,8 @@ export class ListProductsComponent {
       text: "El registro será eliminado!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
+      confirmButtonColor: "#e83283",
+      cancelButtonColor: "#39cbfb",
       confirmButtonText: "SI, ESTOY SEGURO",
       cancelButtonText: "NO"
     }).then((result) => {
