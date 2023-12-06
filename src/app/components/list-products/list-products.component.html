@@ -26,6 +26,13 @@
                     <button (click)="deleteProduct(item.id!)" type="button" class="btn btn-primary btn-sm ms-1">Eliminar</button>
                 </td>
             </tr>
+            <tr *ngIf="listProducts.length == 0" class="table-light">
+                <td>No se encontraron resultados</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
         </tbody>
 
     </table>
