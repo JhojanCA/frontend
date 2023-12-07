@@ -74,14 +74,13 @@ export class AddEditComponent {
 
   getProduct(id: number) {
     this.loading = true;
-    this._productService.getProduct(id).subscribe((data: Product[]) => {
+    this._productService.getProduct(id).subscribe((data: Product) => {
       this.loading = false;
-      console.log(data[0]);
       this.form.setValue({
-        name: data[0].name,
-        description: data[0].description,
-        price: data[0].price,
-        stock: data[0].stock
+        name: data.name,
+        description: data.description,
+        price: data.price,
+        stock: data.stock
       });
     });
   }
