@@ -40,9 +40,9 @@ export class AddEditComponent {
 
   addProduct() {
     const product: Product = {
-      name: this.form.value.nombre,
-      description: this.form.value.descripcion,
-      price: this.form.value.precio,
+      name: this.form.value.name,
+      description: this.form.value.description,
+      price: this.form.value.price,
       stock: this.form.value.stock,
     } 
 
